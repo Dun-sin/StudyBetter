@@ -11,6 +11,7 @@
 	},
 	"dependencies": {
 		"@next/font": "13.1.6",
+		"@tailwindcss/typography": "^0.5.9",
 		"@types/node": "18.11.18",
 		"@types/react": "18.0.27",
 		"@types/react-dom": "18.0.10",
@@ -19,6 +20,7 @@
 		"next": "13.1.6",
 		"react": "18.2.0",
 		"react-dom": "18.2.0",
+		"tesseract.js": "^2.1.1",
 		"typescript": "4.9.4"
 	},
 	"repository": {
@@ -29,6 +31,7 @@
 		"access": "restricted"
 	},
 	"devDependencies": {
+		"@iconify/react": "^4.1.0",
 		"autoprefixer": "^10.4.13",
 		"cz-conventional-changelog": "^3.3.0",
 		"postcss": "^8.4.21",
