@@ -1,10 +1,14 @@
 import Tesseract from 'tesseract.js';
 import { Icon } from '@iconify/react';
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useState, Dispatch, SetStateAction } from 'react';
 
-const SubmitNotes = () => {
+let radioButtonValue: string = 'explain';
+type Props = {
+	setData: Dispatch<SetStateAction<{ note: string; task: string }>>;
+};
+
+const SubmitNotes = ({ setData }: Props) => {
 	const [imagePath, setImagePath] = useState('');
-	const [text, setText] = useState('');
 
 	const handleOnImageUpload = (event: ChangeEvent<HTMLInputElement>) => {
 		if (!event.target.files) return;
@@ -18,15 +22,21 @@ const SubmitNotes = () => {
 		})
 			.then((result) => {
 				const arrayOfWords = result.data.words.map((item) => item.text);
-				setText(arrayOfWords.join(' '));
+				setData({ note: arrayOfWords.join(' '), task: radioButtonValue });
 			})
 			.catch((err) => {
 				console.error(err);
 			});
 	};
 
+	const handleRadioButtonChange = (event: any) => {
+		const { value } = event.target;
+		radioButtonValue = value;
+		console.log(radioButtonValue);
+	};
+
 	return (
-		<section className='center flex-col w-full h-full gap-3'>
+		<section className='center flex-col w-full h-full gap-3 select-none'>
 			<div className='md:min-w-[40%] md:max-w-[600px] w-[85%]'>
 				<label
 					htmlFor='dropzone-file'
@@ -55,7 +65,14 @@ const SubmitNotes = () => {
 				<ul className='items-center w-full text-sm font-medium bg-white sm:flex dark:bg-mid text-white'>
 					<li className='w-full border-sm:border-b-0 sm:border-r border-dark'>
 						<div className='flex items-center p-1 justify-center'>
-							<input id='explain' type='radio' name='task' className='hidden' />
+							<input
+								id='explain'
+								type='radio'
+								name='task'
+								className='hidden'
+								value='explain'
+								onClick={handleRadioButtonChange}
+							/>
 							<label
 								htmlFor='explain'
 								className='w-full p-1 font-medium text-gray-900 dark:text-gray-300 text-f2xs focus:bg-red-700 rounded-sm center cursor-pointer'>
@@ -70,6 +87,8 @@ const SubmitNotes = () => {
 								type='radio'
 								name='task'
 								className='hidden'
+								value='simplify'
+								onClick={handleRadioButtonChange}
 							/>
 							<label
 								htmlFor='simplify'
@@ -85,6 +104,8 @@ const SubmitNotes = () => {
 								type='radio'
 								name='task'
 								className='hidden'
+								value='keypoints'
+								onClick={handleRadioButtonChange}
 							/>
 							<label
 								htmlFor='keypoints'
@@ -100,6 +121,8 @@ const SubmitNotes = () => {
 								type='radio'
 								name='task'
 								className='hidden'
+								value='question'
+								onClick={handleRadioButtonChange}
 							/>
 							<label
 								htmlFor='question'
