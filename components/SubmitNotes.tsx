@@ -1,144 +1,73 @@
-import Tesseract from 'tesseract.js';
-import { Icon } from '@iconify/react';
-import { ChangeEvent, useState, Dispatch, SetStateAction } from 'react';
+import { useState, Dispatch, SetStateAction, useEffect } from 'react';
+import SubmitImageNotes from './UseImage/SubmitImageNotes';
+import SubmitTextNotes from './UseText/SubmitTextNotes';
 
-let radioButtonValue: string = 'explain';
 type Props = {
 	setData: Dispatch<SetStateAction<{ note: string; task: string }>>;
+	setIsResultOpen: Dispatch<SetStateAction<boolean>>;
 };
 
-const SubmitNotes = ({ setData }: Props) => {
-	const [imagePath, setImagePath] = useState('');
+const SubmitNotes = ({ setData, setIsResultOpen }: Props) => {
+	const [type, setType] = useState('text');
 
-	const handleOnImageUpload = (event: ChangeEvent<HTMLInputElement>) => {
-		if (!event.target.files) return;
-
-		setImagePath(URL.createObjectURL(event.target.files[0]));
-	};
-
-	const handleClick = () => {
-		Tesseract.recognize(imagePath, 'eng', {
-			logger: (m) => console.log(m),
-		})
-			.then((result) => {
-				const arrayOfWords = result.data.words.map((item) => item.text);
-				setData({ note: arrayOfWords.join(' '), task: radioButtonValue });
-			})
-			.catch((err) => {
-				console.error(err);
-			});
-	};
-
-	const handleRadioButtonChange = (event: any) => {
+	const handleTypeChange = (event: any) => {
 		const { value } = event.target;
-		radioButtonValue = value;
-		console.log(radioButtonValue);
+		setType(value);
 	};
 
 	return (
-		<section className='center flex-col w-full h-full gap-3 select-none'>
-			<div className='md:min-w-[40%] md:max-w-[600px] w-[85%]'>
-				<label
-					htmlFor='dropzone-file'
-					className='flex flex-col items-center justify-center h-64 border-2 border-mid border-dashed cursor-pointer bg-light hover:bg-gray-50 hover:opacity-60 w-full'>
-					<div className='flex flex-col items-center justify-center pt-5 pb-6'>
-						<Icon
-							icon='material-symbols:cloud-upload'
-							color='#101A22'
-							width='100'
-							height='100'
+		<section className='center h-full w-full select-none flex-col'>
+			<ul className='w-[85%] items-center bg-white text-sm font-medium text-white dark:bg-mid sm:flex md:min-w-[40%] md:max-w-[600px]'>
+				<li className='border-sm:border-b-0 w-full border-dark sm:border-r'>
+					<div className='flex items-center justify-center p-1'>
+						<input
+							id='text'
+							type='radio'
+							name='type'
+							className='hidden'
+							value='text'
+							onClick={handleTypeChange}
+							defaultChecked
 						/>
-						<p className='mb-2 text-sm text-mid'>
-							<span className='font-semibold'>Click to upload</span> or drag and
-							drop
-						</p>
+						<label
+							htmlFor='text'
+							className='center w-full cursor-pointer rounded-sm p-1 text-f2xs font-medium'>
+							Text
+						</label>
 					</div>
-					<input
-						id='dropzone-file'
-						type='file'
-						className='hidden'
-						onChange={handleOnImageUpload}
-						accept='image/*'
+				</li>
+				<li className='border-sm:border-b-0 w-full border-dark sm:border-r'>
+					<div className='flex items-center justify-center p-1'>
+						<input
+							id='image'
+							type='radio'
+							name='type'
+							className='hidden'
+							value='image'
+							onClick={handleTypeChange}
+						/>
+						<label
+							htmlFor='image'
+							className='center w-full cursor-pointer rounded-sm p-1 text-f2xs font-medium text-gray-900 focus:bg-red-700 dark:text-gray-300'>
+							Image{' '}
+						</label>
+					</div>
+				</li>
+			</ul>
+			<div className='center w-[85%] flex-col gap-3 md:min-w-[40%] md:max-w-[600px]'>
+				{type === 'image' && (
+					<SubmitImageNotes
+						setData={setData}
+						setIsResultOpen={setIsResultOpen}
 					/>
-				</label>
-
-				<ul className='items-center w-full text-sm font-medium bg-white sm:flex dark:bg-mid text-white'>
-					<li className='w-full border-sm:border-b-0 sm:border-r border-dark'>
-						<div className='flex items-center p-1 justify-center'>
-							<input
-								id='explain'
-								type='radio'
-								name='task'
-								className='hidden'
-								value='explain'
-								onClick={handleRadioButtonChange}
-							/>
-							<label
-								htmlFor='explain'
-								className='w-full p-1 font-medium text-gray-900 dark:text-gray-300 text-f2xs focus:bg-red-700 rounded-sm center cursor-pointer'>
-								Explain{' '}
-							</label>
-						</div>
-					</li>
-					<li className='w-full border-sm:border-b-0 sm:border-r border-dark'>
-						<div className='flex items-center p-1 justify-center'>
-							<input
-								id='simplify'
-								type='radio'
-								name='task'
-								className='hidden'
-								value='simplify'
-								onClick={handleRadioButtonChange}
-							/>
-							<label
-								htmlFor='simplify'
-								className='w-full p-1 font-medium text-gray-900 dark:text-gray-300 text-f2xs focus:bg-red-700 rounded-sm center cursor-pointer'>
-								Simplify
-							</label>
-						</div>
-					</li>
-					<li className='w-full border-sm:border-b-0 sm:border-r border-dark'>
-						<div className='flex items-center p-1 justify-center'>
-							<input
-								id='keypoints'
-								type='radio'
-								name='task'
-								className='hidden'
-								value='keypoints'
-								onClick={handleRadioButtonChange}
-							/>
-							<label
-								htmlFor='keypoints'
-								className='w-full p-1 font-medium text-gray-900 dark:text-gray-300 text-f2xs focus:bg-red-700 rounded-sm center cursor-pointer'>
-								Key Points
-							</label>
-						</div>
-					</li>
-					<li className='w-full border-dark'>
-						<div className='flex items-center p-1 justify-center'>
-							<input
-								id='question'
-								type='radio'
-								name='task'
-								className='hidden'
-								value='question'
-								onClick={handleRadioButtonChange}
-							/>
-							<label
-								htmlFor='question'
-								className='w-full p-1 font-medium text-gray-900 dark:text-gray-300 text-f2xs focus:bg-red-700 rounded-sm center cursor-pointer'>
-								Generate Question
-							</label>
-						</div>
-					</li>
-				</ul>
+				)}
+				{type === 'text' && (
+					<SubmitTextNotes
+						setData={setData}
+						setIsResultOpen={setIsResultOpen}
+					/>
+				)}
 			</div>
-
-			<button
-				onClick={handleClick}
-				className='text-fmd bg-brand px-16 py-2 text-light rounded-sm'>
-				Submit
-			</button>
 		</section>
 	);
 };

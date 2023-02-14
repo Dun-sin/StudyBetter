@@ -18,6 +18,7 @@
 		"eslint": "8.33.0",
 		"eslint-config-next": "13.1.6",
 		"next": "13.1.6",
+		"openai": "^3.1.0",
 		"react": "18.2.0",
 		"react-dom": "18.2.0",
 		"tesseract.js": "^2.1.1",
@@ -35,6 +36,8 @@
 		"autoprefixer": "^10.4.13",
 		"cz-conventional-changelog": "^3.3.0",
 		"postcss": "^8.4.21",
+		"prettier": "^2.8.3",
+		"prettier-plugin-tailwindcss": "^0.2.2",
 		"prop-types": "^15.8.1",
 		"semantic-release": "^19.0.3",
 		"tailwindcss": "^3.2.4"
