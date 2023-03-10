@@ -8,11 +8,11 @@ type Props = {
 
 const SubmitTextNotes = ({ setData, setIsResultOpen }: Props) => {
 	const [radioButtonValue, setRadioButtonValue] = useState('explain');
-	const inputRef = useRef(null);
+	const inputRef = useRef<HTMLTextAreaElement>(null);
 
 	const handleClick = () => {
-		if (inputRef.current === null || inputRef.current.value.length === 0)
-			return;
+		if (inputRef.current === null) return;
+		if (inputRef.current.value.length === 0) return;
 
 		setData({
 			note: inputRef.current.value,
