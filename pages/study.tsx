@@ -1,7 +1,8 @@
 import Link from 'next/link';
-import Head from 'next/head'
+import Head from 'next/head';
 import { useState, useEffect } from 'react';
 
+import isOnline from 'is-online';
 import { Icon } from '@iconify/react';
 import { useTransition, animated } from '@react-spring/web';
 
@@ -9,7 +10,7 @@ import SubmitNotes from '@/components/SubmitNotes';
 import DisplayResult from '@/components/DisplayResult';
 
 const Study = () => {
-	const [isOnline, setIsOnline] = useState(true);
+	const [online, setOnline] = useState(true);
 
 	const [isResultOpen, setIsResultOpen] = useState(false);
 	const [data, setData] = useState({
@@ -18,20 +19,13 @@ const Study = () => {
 	});
 
 	useEffect(() => {
-		function handleNetworkChange() {
-			setIsOnline(navigator.onLine);
-		}
+		const interval = setInterval(() => {
+			isOnline().then((online) => {
+				setOnline(online);
+			});
+		}, 3500);
 
-		if (typeof window === 'undefined') return;
-		// Add event listeners for online and offline events
-		window.addEventListener('online', handleNetworkChange);
-		window.addEventListener('offline', handleNetworkChange);
-
-		// Remove event listeners on unmount
-		return () => {
-			window.removeEventListener('online', handleNetworkChange);
-			window.removeEventListener('offline', handleNetworkChange);
-		};
+		return () => clearInterval(interval);
 	}, []);
 
 	const toggleResultVisibility = () => {
@@ -121,7 +115,7 @@ const Study = () => {
 
 			<div
 				className={`fixed inset-0 z-50 overflow-y-auto ${
-					isOnline ? 'hidden' : 'block'
+					online ? 'hidden' : 'block'
 				}`}
 				aria-labelledby='offline-modal-title'
 				role='dialog'
