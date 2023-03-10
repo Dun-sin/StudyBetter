@@ -7,7 +7,7 @@ import { useTransition, animated } from '@react-spring/web';
 import SubmitNotes from '@/components/SubmitNotes';
 import DisplayResult from '@/components/DisplayResult';
 
-const learn = () => {
+const study = () => {
 	const [isOnline, setIsOnline] = useState(true);
 
 	const [isResultOpen, setIsResultOpen] = useState(false);
@@ -131,7 +131,7 @@ const learn = () => {
 									<h3
 										className='text-lg font-medium leading-6 text-gray-900'
 										id='offline-modal-title'>
-										You're offline
+										{`You're offline`}
 									</h3>
 									<div className='mt-2'>
 										<p className='text-sm text-gray-500'>
@@ -148,5 +148,5 @@ const learn = () => {
 	);
 };
 
-export default learn;
+export default study;
 // TODO: add proper error message for when no input is given
