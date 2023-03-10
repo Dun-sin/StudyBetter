@@ -152,7 +152,7 @@ const Study = () => {
 									</h3>
 									<div className='mt-2'>
 										<p className='text-sm text-gray-500'>
-											Please check your internet connection and try again.
+											Please check your internet connection
 										</p>
 									</div>
 								</div>
