@@ -7,7 +7,7 @@ import { useTransition, animated } from '@react-spring/web';
 import SubmitNotes from '@/components/SubmitNotes';
 import DisplayResult from '@/components/DisplayResult';
 
-const study = () => {
+const Study = () => {
 	const [isOnline, setIsOnline] = useState(true);
 
 	const [isResultOpen, setIsResultOpen] = useState(false);
@@ -148,5 +148,5 @@ const study = () => {
 	);
 };
 
-export default study;
+export default Study;
 // TODO: add proper error message for when no input is given

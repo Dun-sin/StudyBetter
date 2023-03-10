@@ -67,7 +67,7 @@ const DisplayResult = ({ data }: Props) => {
 			setIsLoading(true);
 			getResult();
 		}
-	});
+	}, []);
 
 	const copyToClipboard = async () => {
 		if (result === '') return;
