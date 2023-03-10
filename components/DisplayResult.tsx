@@ -1,6 +1,7 @@
 import { Icon } from '@iconify/react';
 import { useEffect, useState } from 'react';
 import { Configuration, OpenAIApi } from 'openai';
+
 type Props = {
 	data: { note: string; task: string };
 };
@@ -20,7 +21,7 @@ const DisplayResult = ({ data }: Props) => {
 			selection = 'Explain this in detail: ';
 			break;
 		case 'simplify':
-			selection = 'Simplify thisn for a 5 year old to understand: ';
+			selection = 'Simplify this for a 5 year old to understand: ';
 			break;
 		case 'keypoints':
 			selection = 'Extract the key points from this note in list form: ';

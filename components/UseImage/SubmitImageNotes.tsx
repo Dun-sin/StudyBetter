@@ -1,6 +1,7 @@
+import { ChangeEvent, useState, Dispatch, SetStateAction } from 'react';
+
 import Tesseract from 'tesseract.js';
 import { Icon } from '@iconify/react';
-import { ChangeEvent, useState, Dispatch, SetStateAction } from 'react';
 import RadioButtons from '../RadioButtons';
 
 type Props = {
@@ -26,21 +27,77 @@ const SubmitImageNotes = ({ setData, setIsResultOpen }: Props) => {
 	};
 
 	const handleClick = () => {
+		if (imagePath === '') return;
 		setIsLoading(true);
-		Tesseract.recognize(imagePath, 'eng', {
-			logger: ({ status, progress }) =>
-				setTextExtractingStatus({ status, progress: progress * 100 }),
-		})
-			.then((result) => {
-				const arrayOfWords = result.data.words.map((item) => item.text);
-				setData({ note: arrayOfWords.join(' '), task: radioButtonValue });
-				setIsLoading(false);
-				setIsResultOpen(true);
+		setTextExtractingStatus({
+			...textExtractingStatus,
+			status: 'Optimizing Image',
+		});
+
+		// Load the image
+		const image = new Image();
+		image.src = imagePath;
+
+		image.onload = () => {
+			// Create a canvas element
+			const canvas = document.createElement('canvas');
+			const ctx = canvas.getContext('2d');
+
+			// Resize the image to reduce noise and increase speed
+			const maxWidth = 1000;
+			const maxHeight = 1000;
+			let width = image.width;
+			let height = image.height;
+			if (width > height) {
+				if (width > maxWidth) {
+					height *= maxWidth / width;
+					width = maxWidth;
+				}
+			} else {
+				if (height > maxHeight) {
+					width *= maxHeight / height;
+					height = maxHeight;
+				}
+			}
+
+			canvas.width = width;
+			canvas.height = height;
+
+			if (ctx === null) return;
+			ctx.drawImage(image, 0, 0, width, height);
+
+			// Adjust the brightness and contrast of the image
+			const imageData = ctx.getImageData(0, 0, width, height);
+			const data = imageData.data;
+			const brightness = 50;
+			const contrast = 50;
+			for (let i = 0; i < data.length; i += 4) {
+				data[i] += brightness;
+				data[i + 1] += brightness;
+				data[i + 2] += brightness;
+				data[i] = (data[i] / 255 - 0.5) * contrast + 0.5 * 255;
+				data[i + 1] = (data[i + 1] / 255 - 0.5) * contrast + 0.5 * 255;
+				data[i + 2] = (data[i + 2] / 255 - 0.5) * contrast + 0.5 * 255;
+			}
+			ctx.putImageData(imageData, 0, 0);
+
+			// Convert the canvas to a data URL and send it to Tesseract
+			const optimizedImagePath = canvas.toDataURL('image/jpeg');
+			Tesseract.recognize(optimizedImagePath, 'eng', {
+				logger: ({ status, progress }) =>
+					setTextExtractingStatus({ status, progress: progress * 100 }),
 			})
-			.catch((err) => {
-				console.error(err);
-				setIsLoading(false);
-			});
+				.then((result) => {
+					const arrayOfWords = result.data.words.map((item) => item.text);
+					setData({ note: arrayOfWords.join(' '), task: radioButtonValue });
+					setIsLoading(false);
+					setIsResultOpen(true);
+				})
+				.catch((err) => {
+					console.error(err);
+					setIsLoading(false);
+				});
+		};
 	};
 
 	return (
