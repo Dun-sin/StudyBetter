@@ -38,8 +38,7 @@ const Study = () => {
 	const resultTransitions = useTransition(isResultOpen, {
 		from: { opacity: 0, transform: 'translateX(100%)' },
 		enter: { opacity: 1, transform: 'translateX(0%)' },
-		leave: { opacity: 0, transform: 'translateX(100%)' },
-		config: { tension: 400, friction: 200, duration: 200 },
+		config: { tension: 1000, friction: 500, duration: 300 },
 	});
 
 	return (

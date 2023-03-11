@@ -10,7 +10,7 @@ const RadioButtons = ({ setRadioButtonValue }: Props) => {
 		setRadioButtonValue(value);
 	};
 	return (
-		<ul className='w-full items-center bg-white text-sm font-medium text-white dark:bg-mid sm:flex'>
+		<ul className='grid w-full grid-cols-2 bg-white text-sm font-medium text-white dark:bg-mid sm:grid-cols-4'>
 			<li className='border-sm:border-b-0 w-full border-dark sm:border-r'>
 				<div className='flex items-center justify-center p-1'>
 					<input

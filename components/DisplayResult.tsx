@@ -79,11 +79,11 @@ const DisplayResult = ({ data }: Props) => {
 	};
 
 	return (
-		<section className='flex flex-wrap justify-center gap-2 sm:justify-start'>
-			<div className='h-[400px] w-[48%] min-w-[300px] max-w-[1200px] rounded-sm border p-4 text-fsm font-normal sm:max-h-full sm:min-h-[90vh]'>
+		<section className='mx-4 flex flex-wrap justify-center gap-2 sm:justify-start'>
+			<div className='h-[400px] w-[48%] min-w-[250px] max-w-[1200px] rounded-sm border p-4 text-fsm font-normal sm:max-h-full sm:min-h-[90vh]'>
 				{data.note}
 			</div>
-			<div className='h-[400px] w-[48%] min-w-[300px] max-w-[1200px] sm:max-h-full sm:min-h-[90vh]'>
+			<div className='h-[400px] w-[48%] min-w-[250px] max-w-[1200px] sm:max-h-full sm:min-h-[90vh]'>
 				<div className='flex justify-between'>
 					<h2>Results</h2>
 
