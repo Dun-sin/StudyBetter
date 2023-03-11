@@ -38,11 +38,11 @@
 }
 
 [type='radio'] + label:nth-of-type(2n + 1):before {
-	left: 100%;
+	right: 100%;
 }
 
 [type='radio'] + label:nth-of-type(2n):before {
-	left: -100%;
+	left: 100%;
 }
 
 [type='radio']:checked + label:before {
