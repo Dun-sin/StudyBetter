@@ -38,12 +38,16 @@
 	transition: transform 0.5s ease-in-out;
 }
 
+[type='radio'] + label:nth-of-type(2):before {
+	left: 0;
+	right: -100%;
+}
+
 [type='radio']:checked + label:before {
 	transform: translateX(-100%);
 	transition: transform 0.5s ease-in-out;
 }
 
-[type='radio']:checked + label:nth-child(2):before {
-	transform: translateX(100%);
-	transition: transform 0.5s ease-in-out;
+[type='radio']:checked + label:nth-of-type(2):before {
+	transform: translateX(100%) !important;
 }
