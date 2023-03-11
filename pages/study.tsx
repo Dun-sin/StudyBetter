@@ -45,26 +45,7 @@ const Study = () => {
 		<>
 			<Head>
 				<title>Study Better | Make Exam Preparation Easier</title>
-				<link
-					rel='apple-touch-icon'
-					sizes='180x180'
-					href='/public/apple-touch-icon.png'
-				/>
-				<link
-					rel='icon'
-					type='image/png'
-					sizes='32x32'
-					href='/public/favicon-32x32.png'
-				/>
-				<link
-					rel='icon'
-					type='image/png'
-					sizes='16x16'
-					href='/public/favicon-16x16.png'
-				/>
-				<link rel='manifest' href='/public/site.webmanifest' />
 			</Head>
-
 			<section className='flex h-screen flex-col gap-3 overflow-hidden bg-dark pt-4 text-fxl font-semibold text-light'>
 				{isResultOpen ? (
 					<div
