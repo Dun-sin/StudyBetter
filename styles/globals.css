@@ -37,9 +37,9 @@
 	transition: transform 0.5s ease-in-out;
 }
 
-[type='radio'] + label:nth-of-type(2n + 1):before {
+/* [type='radio'] + label:nth-of-type(2n + 1):before {
 	right: 100%;
-}
+} */
 
 [type='radio'] + label:nth-of-type(2n):before {
 	left: 100%;
