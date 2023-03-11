@@ -1,6 +1,42 @@
-import '@/styles/globals.css'
-import type { AppProps } from 'next/app'
+import Script from 'next/script';
+import { useEffect } from 'react';
+import { useRouter } from 'next/router';
+import type { AppProps } from 'next/app';
+
+import '@/styles/globals.css';
+import { initGA, logPageView } from '@/ga';
 
 export default function App({ Component, pageProps }: AppProps) {
-  return <Component {...pageProps} />
+	const router = useRouter();
+
+	useEffect(() => {
+		initGA();
+		logPageView();
+		router.events.on('routeChangeComplete', logPageView);
+
+		return () => {
+			router.events.off('routeChangeComplete', logPageView);
+		};
+	}, []);
+
+	return (
+		<>
+			<Component {...pageProps} />;
+			<Script
+				strategy='afterInteractive'
+				src={`https://www.googletagmanager.com/gtag/js?id=G-M48YDC11FD`}
+			/>
+			<Script
+				strategy='afterInteractive'
+				dangerouslySetInnerHTML={{
+					__html: `
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-M48YDC11FD');
+    `,
+				}}
+			/>
+		</>
+	);
 }
