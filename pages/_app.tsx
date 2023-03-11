@@ -21,12 +21,13 @@ export default function App({ Component, pageProps }: AppProps) {
 
 	return (
 		<>
-			<Component {...pageProps} />
 			<Script
 				strategy='afterInteractive'
 				src={`https://www.googletagmanager.com/gtag/js?id=G-M48YDC11FD`}
+				id='interactive1'
 			/>
 			<Script
+				id='interactive2'
 				strategy='afterInteractive'
 				dangerouslySetInnerHTML={{
 					__html: `
@@ -37,6 +38,7 @@ export default function App({ Component, pageProps }: AppProps) {
     `,
 				}}
 			/>
+			<Component {...pageProps} />
 		</>
 	);
 }
