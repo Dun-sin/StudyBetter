@@ -115,8 +115,17 @@ const SubmitImageNotes = ({
 				setTextExtractingStatus({ status, progress: progress * 100 }),
 		})
 			.then((result) => {
-				const arrayOfWords = result.data.words.map((item) => item.text);
-				setData({ note: arrayOfWords.join(' '), task: radioButtonValue });
+				const words = result.data.words.map((item) => item.text).join(' ');
+
+				if (words.length > 2048) {
+					setErrorMessage({
+						state: true,
+						message: 'Text is more than 2048 characters',
+					});
+					return;
+				}
+
+				setData({ note: words, task: radioButtonValue });
 				setIsLoading(false);
 				setIsResultOpen(true);
 			})

@@ -21,14 +21,22 @@ const SubmitTextNotes = ({
 	const inputRef = useRef<HTMLTextAreaElement>(null);
 
 	const handleClick = () => {
-		if (inputRef.current === null) return;
-		if (inputRef.current.value.length === 0) {
+		const text = inputRef.current?.value;
+		if (text === null || text === undefined) return;
+		if (text.length === 0) {
 			setErrorMessage({ state: true, message: 'No text found' });
+			return;
+		}
+		if (text.length > 2048) {
+			setErrorMessage({
+				state: true,
+				message: 'Text is more than 2048 characters',
+			});
 			return;
 		}
 
 		setData({
-			note: inputRef.current.value,
+			note: text,
 			task: radioButtonValue,
 		});
 		setIsResultOpen(true);
