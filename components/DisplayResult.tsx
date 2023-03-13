@@ -92,7 +92,7 @@ const DisplayResult = ({ data }: Props) => {
 
 	return (
 		<>
-			<section className='mx-4 flex flex-wrap justify-center gap-2 sm:justify-start'>
+			<section className='mx-4 flex flex-wrap justify-center gap-2 overflow-y-auto sm:justify-start'>
 				<div className='h-[400px] w-[48%] min-w-[250px] max-w-[1200px] overflow-y-auto rounded-sm border p-4 text-fsm font-normal sm:max-h-full sm:min-h-[90vh]'>
 					{data.note}
 				</div>

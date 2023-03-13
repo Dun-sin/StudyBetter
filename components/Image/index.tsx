@@ -131,10 +131,10 @@ const SubmitImageNotes = ({
 				.then((result) => {
 					const words = result.data.words.map((item) => item.text).join(' ');
 
-					if (words.length > 2048) {
+					if (words.length > 1500) {
 						setErrorMessage({
 							state: true,
-							message: 'Text is more than 2048 characters',
+							message: 'Text is more than 1500 characters',
 						});
 						return;
 					} else if (words.length === 0) throw Error();
@@ -160,10 +160,10 @@ const SubmitImageNotes = ({
 		// 	.then((result) => {
 		// 		const words = result.data.words.map((item) => item.text).join(' ');
 
-		// 		if (words.length > 2048) {
+		// 		if (words.length > 1500) {
 		// 			setErrorMessage({
 		// 				state: true,
-		// 				message: 'Text is more than 2048 characters',
+		// 				message: 'Text is more than 1500 characters',
 		// 			});
 		// 			return;
 		// 		}

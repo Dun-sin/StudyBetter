@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useRef, useState } from 'react';
+import { Dispatch, SetStateAction, useRef, useState, useEffect } from 'react';
 
 import { animated, useSpring } from '@react-spring/web';
 
@@ -18,7 +18,23 @@ const SubmitTextNotes = ({
 	setErrorMessage,
 }: Props) => {
 	const [radioButtonValue, setRadioButtonValue] = useState('explain');
+	const [lengthOfText, setLengthOfText] = useState(0);
+
 	const inputRef = useRef<HTMLTextAreaElement>(null);
+	const spanRef = useRef<HTMLSpanElement>(null);
+
+	useEffect(() => {
+		const handleChange = () => {
+			const length = inputRef?.current?.value?.length || 0;
+			setLengthOfText(length);
+		};
+
+		inputRef.current?.addEventListener('input', handleChange);
+
+		return () => {
+			inputRef.current?.removeEventListener('input', handleChange);
+		};
+	}, [inputRef]);
 
 	const handleClick = () => {
 		const text = inputRef.current?.value;
@@ -27,10 +43,10 @@ const SubmitTextNotes = ({
 			setErrorMessage({ state: true, message: 'No text found' });
 			return;
 		}
-		if (text.length > 2048) {
+		if (text.length > 1500) {
 			setErrorMessage({
 				state: true,
-				message: 'Text is more than 2048 characters',
+				message: 'Text is more than 1500 characters',
 			});
 			return;
 		}
@@ -47,12 +63,18 @@ const SubmitTextNotes = ({
 	return (
 		<>
 			<animated.div className='w-full' style={springProps}>
-				<textarea
-					id='large-input'
-					placeholder='Enter the Notes'
-					ref={inputRef}
-					className='focus:ring-mid-500 block h-64 w-full resize-none border-2 border-mid bg-light  bg-clip-padding p-4 text-fxs font-normal text-gray-900 transition ease-in-out focus:border-dashed  focus:outline-none'
-				/>
+				<div className='relative'>
+					<textarea
+						id='large-input'
+						placeholder='Enter the Notes'
+						ref={inputRef}
+						className='focus:ring-mid-500 block h-64 w-full resize-none border-2 border-mid bg-light  bg-clip-padding p-4 text-fxs font-normal text-gray-900 transition ease-in-out focus:border-dashed  focus:outline-none'></textarea>
+					<span
+						className='absolute bottom-2 right-4 text-fsm text-gray-800'
+						ref={spanRef}>
+						{lengthOfText}/1500
+					</span>
+				</div>
 				<RadioButtons setRadioButtonValue={setRadioButtonValue} />
 			</animated.div>
 

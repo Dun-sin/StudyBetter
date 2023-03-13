@@ -9,7 +9,7 @@
 	--step-4: clamp(0.81rem, calc(0.55rem + 1.29vw), 1.6rem);
 	--step-5: clamp(0.86rem, calc(0.56rem + 1.53vw), 1.8rem);
 	--primary: #101a22;
-	--secondary: #282c34;
+	--secondary: #2d4c65;
 }
 
 @tailwind base;
@@ -44,6 +44,6 @@
 }
 
 [type='radio']:checked ~ label {
-	background-color: #2d4c65;
+	background-color: var(--secondary);
 	transition: background-color 0.3s ease-in-out;
 }
