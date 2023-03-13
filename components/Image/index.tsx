@@ -196,8 +196,10 @@ const SubmitImageNotes = ({
 						<p className='center flex-col p-4 text-sm text-mid'>
 							{fileName === '' ? (
 								<>
-									<span className='font-semibold'>Click to upload</span> or drag
-									and drop
+									<span className='font-semibold'>Click to upload</span>
+									<p className='text-fxs'>
+										Make sure it's not a low quality picture
+									</p>
 								</>
 							) : (
 								<>
