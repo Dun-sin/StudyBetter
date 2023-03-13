@@ -46,7 +46,7 @@ export default function Home() {
 						Get Started
 					</Link>
 				</div>
-				<div className='mt-8 grid max-w-6xl grid-cols-1 gap-3 px-4 md:grid-cols-4 md:gap-8'>
+				<div className='mt-8 grid max-w-6xl grid-cols-1 gap-2 px-4 md:grid-cols-4 md:gap-4'>
 					<Card
 						icon='icon-park-outline:concept-sharing'
 						header='Explain Difficult Concepts'

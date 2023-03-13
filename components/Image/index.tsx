@@ -147,7 +147,7 @@ const SubmitImageNotes = ({
 					console.error(err);
 					setErrorMessage({
 						state: true,
-						message: 'Oops! Something went wrongs',
+						message: 'Oops! Something went wrong',
 					});
 					setIsLoading(false);
 				});
