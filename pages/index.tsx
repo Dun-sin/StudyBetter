@@ -30,7 +30,7 @@ export default function Home() {
 				<meta name='msapplication-TileColor' content='#da532c' />
 				<meta name='theme-color' content='#ffffff' />
 			</Head>
-			<div className='flex min-h-screen flex-col items-center justify-center bg-dark py-5'>
+			<div className='flex min-h-screen flex-col items-center justify-center bg-dark py-20 md:py-5'>
 				<div className='max-w-3xl px-4 text-center'>
 					<h1 className='mb-2 text-f3xl font-bold text-white'>
 						Study Better Simplifies Your Studies
@@ -46,7 +46,7 @@ export default function Home() {
 						Get Started
 					</Link>
 				</div>
-				<div className='mt-8 grid max-w-5xl grid-cols-1 gap-8 px-4 md:grid-cols-3'>
+				<div className='mt-8 grid max-w-6xl grid-cols-1 gap-3 px-4 md:grid-cols-4 md:gap-8'>
 					<Card
 						icon='icon-park-outline:concept-sharing'
 						header='Explain Difficult Concepts'
@@ -61,6 +61,11 @@ export default function Home() {
 						icon='mdi:head-question-outline'
 						header='Generate Possible Questions'
 						text='Provides a list of possible exam questions'
+					/>
+					<Card
+						icon='material-symbols:key-outline-rounded'
+						header='Get key points'
+						text='Makes it easier for you to identify the most important points of your notes'
 					/>
 				</div>
 			</div>
