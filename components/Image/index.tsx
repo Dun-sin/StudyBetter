@@ -45,94 +45,137 @@ const SubmitImageNotes = ({
 			status: 'Optimizing Image',
 		});
 
-		// // Load the image
-		// const image = new Image();
-		// image.src = imagePath;
+		// Load the image
+		const image = new Image();
+		image.src = imagePath;
 
-		// image.onload = () => {
-		// 	// Create a canvas element
-		// 	const canvas = document.createElement('canvas');
-		// 	const ctx = canvas.getContext('2d');
+		image.onload = () => {
+			// Create a canvas element
+			// Create a canvas element
+			const canvas = document.createElement('canvas');
+			const ctx = canvas.getContext('2d');
 
-		// 	// Resize the image to reduce noise and increase speed
-		// 	const maxWidth = 1000;
-		// 	const maxHeight = 1000;
-		// 	let width = image.width;
-		// 	let height = image.height;
-		// 	if (width > height) {
-		// 		if (width > maxWidth) {
-		// 			height *= maxWidth / width;
-		// 			width = maxWidth;
-		// 		}
-		// 	} else {
-		// 		if (height > maxHeight) {
-		// 			width *= maxHeight / height;
-		// 			height = maxHeight;
-		// 		}
-		// 	}
+			// Resize the image to reduce noise and increase speed
+			const maxWidth = 1000;
+			const maxHeight = 1000;
+			let width = image.width;
+			let height = image.height;
+			if (width > height) {
+				if (width > maxWidth) {
+					height *= maxWidth / width;
+					width = maxWidth;
+				}
+			} else {
+				if (height > maxHeight) {
+					width *= maxHeight / height;
+					height = maxHeight;
+				}
+			}
 
-		// 	canvas.width = width;
-		// 	canvas.height = height;
+			canvas.width = width;
+			canvas.height = height;
 
-		// 	if (ctx === null) return;
-		// 	ctx.drawImage(image, 0, 0, width, height);
+			if (ctx === null) return;
+			// Draw the image onto the canvas
+			ctx.drawImage(image, 0, 0, width, height);
 
-		// 	// Adjust the brightness and contrast of the image
-		// 	const imageData = ctx.getImageData(0, 0, width, height);
-		// 	const data = imageData.data;
-		// 	const brightness = 50;
-		// 	const contrast = 50;
-		// 	for (let i = 0; i < data.length; i += 4) {
-		// 		data[i] += brightness;
-		// 		data[i + 1] += brightness;
-		// 		data[i + 2] += brightness;
-		// 		data[i] = (data[i] / 255 - 0.5) * contrast + 0.5 * 255;
-		// 		data[i + 1] = (data[i + 1] / 255 - 0.5) * contrast + 0.5 * 255;
-		// 		data[i + 2] = (data[i + 2] / 255 - 0.5) * contrast + 0.5 * 255;
-		// 	}
-		// 	ctx.putImageData(imageData, 0, 0);
+			// Adjust the brightness
+			const imageData = ctx.getImageData(0, 0, width, height);
+			const brightness = -50;
+			for (let i = 0; i < width * height; i++) {
+				const index = i * 4;
+				const r = imageData.data[index];
+				const g = imageData.data[index + 1];
+				const b = imageData.data[index + 2];
+				imageData.data[index] = r + brightness;
+				imageData.data[index + 1] = g + brightness;
+				imageData.data[index + 2] = b + brightness;
+			}
 
-		// 	// Convert the canvas to a data URL and send it to Tesseract
-		// 	const optimizedImagePath = canvas.toDataURL('image/jpeg');
-		// 	Tesseract.recognize(optimizedImagePath, 'eng', {
-		// 		logger: ({ status, progress }) =>
-		// 			setTextExtractingStatus({ status, progress: progress * 100 }),
-		// 	})
-		// 		.then((result) => {
-		// 			const arrayOfWords = result.data.words.map((item) => item.text);
-		// 			setData({ note: arrayOfWords.join(' '), task: radioButtonValue });
-		// 			setIsLoading(false);
-		// 			setIsResultOpen(true);
-		// 		})
-		// 		.catch((err) => {
-		// 			console.error(err);
-		// 			setIsLoading(false);
-		// 		});
-		// };
+			// Adjust the exposure
+			const exposure = -78;
+			const exposureFactor = Math.pow(2, exposure / 100);
+			for (let i = 0; i < width * height; i++) {
+				const index = i * 4;
+				const r = imageData.data[index];
+				const g = imageData.data[index + 1];
+				const b = imageData.data[index + 2];
+				imageData.data[index] = r * exposureFactor;
+				imageData.data[index + 1] = g * exposureFactor;
+				imageData.data[index + 2] = b * exposureFactor;
+			}
 
-		Tesseract.recognize(imagePath, 'eng', {
-			logger: ({ status, progress }) =>
-				setTextExtractingStatus({ status, progress: progress * 100 }),
-		})
-			.then((result) => {
-				const words = result.data.words.map((item) => item.text).join(' ');
+			// Adjust the contrast
+			const contrast = 74;
+			const contrastFactor =
+				(259 * (contrast + 255)) / (255 * (259 - contrast));
+			for (let i = 0; i < width * height; i++) {
+				const index = i * 4;
+				const r = imageData.data[index];
+				const g = imageData.data[index + 1];
+				const b = imageData.data[index + 2];
+				imageData.data[index] = contrastFactor * (r - 128) + 128;
+				imageData.data[index + 1] = contrastFactor * (g - 128) + 128;
+				imageData.data[index + 2] = contrastFactor * (b - 128) + 128;
+			}
 
-				if (words.length > 2048) {
+			// Export the modified image as a data URL
+			ctx.putImageData(imageData, 0, 0);
+
+			// Convert the canvas to a data URL and send it to Tesseract
+			const optimizedImagePath = canvas.toDataURL('image/jpeg');
+			Tesseract.recognize(optimizedImagePath, 'eng', {
+				logger: ({ status, progress }) =>
+					setTextExtractingStatus({ status, progress: progress * 100 }),
+			})
+				.then((result) => {
+					const words = result.data.words.map((item) => item.text).join(' ');
+
+					if (words.length > 2048) {
+						setErrorMessage({
+							state: true,
+							message: 'Text is more than 2048 characters',
+						});
+						return;
+					} else if (words.length === 0) throw Error();
+
+					setData({ note: words, task: radioButtonValue });
+					setIsLoading(false);
+					setIsResultOpen(true);
+				})
+				.catch((err) => {
+					console.error(err);
 					setErrorMessage({
 						state: true,
-						message: 'Text is more than 2048 characters',
+						message: 'Oops! Something went wrongs',
 					});
-					return;
-				}
+					setIsLoading(false);
+				});
+		};
 
-				setData({ note: words, task: radioButtonValue });
-				setIsLoading(false);
-				setIsResultOpen(true);
-			})
-			.catch((err) => {
-				console.error(err);
-				setIsLoading(false);
-			});
+		// Tesseract.recognize(imagePath, 'eng', {
+		// 	logger: ({ status, progress }) =>
+		// 		setTextExtractingStatus({ status, progress: progress * 100 }),
+		// })
+		// 	.then((result) => {
+		// 		const words = result.data.words.map((item) => item.text).join(' ');
+
+		// 		if (words.length > 2048) {
+		// 			setErrorMessage({
+		// 				state: true,
+		// 				message: 'Text is more than 2048 characters',
+		// 			});
+		// 			return;
+		// 		}
+
+		// 		setData({ note: words, task: radioButtonValue });
+		// 		setIsLoading(false);
+		// 		setIsResultOpen(true);
+		// 	})
+		// 	.catch((err) => {
+		// 		console.error(err);
+		// 		setIsLoading(false);
+		// 	});
 	};
 
 	const springProps = useSpring({ opacity: 1, from: { opacity: 0 } });
@@ -150,7 +193,7 @@ const SubmitImageNotes = ({
 							width='100'
 							height='100'
 						/>
-						<p className='center flex-col text-sm text-mid'>
+						<p className='center flex-col p-4 text-sm text-mid'>
 							{fileName === '' ? (
 								<>
 									<span className='font-semibold'>Click to upload</span> or drag
@@ -158,7 +201,7 @@ const SubmitImageNotes = ({
 								</>
 							) : (
 								<>
-									<span className='font-semibold'>{fileName}</span>
+									<span className='text-center font-semibold'>{fileName}</span>
 									<br />
 									<span className='font-light underline underline-offset-2'>
 										Click to upload another Image
