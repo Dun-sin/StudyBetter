@@ -24,15 +24,18 @@ const SubmitTextNotes = ({
 	const spanRef = useRef<HTMLSpanElement>(null);
 
 	useEffect(() => {
+		const input = inputRef.current;
+		if (input === null) return;
+
 		const handleChange = () => {
-			const length = inputRef?.current?.value?.length || 0;
+			const length = input?.value?.length || 0;
 			setLengthOfText(length);
 		};
 
-		inputRef.current?.addEventListener('input', handleChange);
+		input.addEventListener('input', handleChange);
 
 		return () => {
-			inputRef.current?.removeEventListener('input', handleChange);
+			input.removeEventListener('input', handleChange);
 		};
 	}, [inputRef]);
 

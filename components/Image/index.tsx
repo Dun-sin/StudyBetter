@@ -198,7 +198,7 @@ const SubmitImageNotes = ({
 								<>
 									<span className='font-semibold'>Click to upload</span>
 									<p className='text-fxs'>
-										Make sure it's not a low quality picture
+										{`Make sure it's not a low quality picture`}
 									</p>
 								</>
 							) : (
